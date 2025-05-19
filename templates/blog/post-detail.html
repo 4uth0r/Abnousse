@@ -1,0 +1,280 @@
+{% extends "core/base.html" %}
+{% load i18n %} {% load static %} {% load jformat %}
+
+{% block title %}{{ post }}{% endblock %}
+
+{% block content %}
+<main>
+    <section class="bg-dark-overlay-4" style="background-image:url({{ post.photo.url }}); background-position: center left; background-size: cover;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 py-md-5 my-lg-5">
+                    <a href="javascript:void(0)" class="badge text-bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>{{ post.category }}</a>
+                    <h1 class="text-white">{{ post }}</h1>
+                    <p class="lead text-justify text-white">{{ post.abstract }}</p>
+                    <ul class="nav nav-divider text-white-force align-items-center">
+                        <li class="nav-item">
+                            <div class="nav-link">
+                                <div class="d-flex align-items-center text-white position-relative">
+                                    <div class="avatar avatar-sm">
+                                        <img class="avatar-img rounded-circle" src="{% if post.author.profile.avatar %}{{ post.author.profile.avatar.url }}{% else %}https://robohash.org/{{ post.author.id }}{% endif %}" alt="">
+                                    </div>
+                                    <span class="ms-3"><i class="fas fa-edit"></i> <a href="javascript:void(0)" class="stretched-link text-reset btn-link">{{ post.author }}</a></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item"><i class="far fa-calendar-alt"></i> {{ post.updated|jformat:"%Y/%m/%d" }}</li>
+                        <li class="nav-item"><i class="far fa-clock"></i> <span id="reading-time">در حال محاسبه...</span></li>
+                        <li class="nav-item"><i class="far fa-eye me-1"></i> 2344 بازدید</li>
+                        <li class="nav-item"><a href="javascript:void(0)"><i class="fas fa-heart me-1 text-danger"></i></a> 266</li>
+                    </ul>
+                    <div class="d-md-flex align-items-center mt-4">
+                        <h5 class="text-white me-3">{% trans "اشتراک‌گذاری" %}</h5>
+                        <ul class="nav text-white-force">
+                            <li class="nav-item">
+                                <a class="nav-link icon-md rounded-circle me-2 mb-2 p-0 fs-5 bg-facebook" href="javascript:void(0)">
+                                    <i class="fab fa-facebook-square align-middle"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link icon-md rounded-circle me-2 mb-2 p-0 fs-5 bg-twitter" href="javascript:void(0)">
+                                    <i class="fab fa-twitter-square align-middle"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link icon-md rounded-circle me-2 mb-2 p-0 fs-5 bg-linkedin" href="javascript:void(0)">
+                                    <i class="fab fa-linkedin align-middle"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link icon-md rounded-circle me-2 mb-2 p-0 fs-5 bg-pinterest" href="javascript:void(0)">
+                                    <i class="fab fa-pinterest align-middle"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link icon-md rounded-circle me-2 mb-2 p-0 fs-5 bg-primary" href="javascript:void(0)">
+                                    <i class="far fa-envelope align-middle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container position-relative" data-sticky-container>
+            <div class="row">
+                <div class="col-lg-9 mb-5">
+                    <article id="post-content">
+                        {{ post.content|safe }}
+                    </article>
+                    <div class="row g-0 my-3">
+                        <div class="col-sm-6 border p-3 p-md-4 position-relative rounded-start">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 h-auto align-items-center d-flex align-self-stretch">
+                                    <i class="bi bi-chevron-compact-right fs-3 text-primary px-1"></i>
+                                </div>
+                                <div class="col-3 d-none d-md-block">
+                                    <img src="{% static 'images/blog/4by3/04.jpg' %}" alt="Image">
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="m-0"> <a href="javascript:void(0)" class="stretched-link btn-link text-reset">دلیل کاهش نرخ دلار</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 border p-3 p-md-4 position-relative text-sm-end rounded-end">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <h5 class="m-0"> <a href="javascript:void(0)" class="stretched-link btn-link text-reset">جدول لیگ در پایان هفته</a></h5>
+                                </div>
+                                <div class="col-3 d-none d-md-block">
+                                    <img src="{% static 'images/blog/4by3/05.jpg' %}" alt="Image">
+                                </div>
+                                <div class="bg-primary bg-opacity-10 h-auto align-items-center d-flex align-self-stretch">
+                                    <i class="bi bi-chevron-compact-left fs-3 text-primary px-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex p-2 p-md-4 my-3 bg-primary bg-opacity-10 rounded">
+                        <a href="javascript:void(0)">
+                            <div class="avatar avatar-xxl me-2 me-md-4">
+                                <img class="avatar-img rounded-circle" src="{% if post.author.profile.avatar %}{{ post.author.profile.avatar.url }}{% else %}https://robohash.org/{{ post.author.id }}{% endif %}" alt="">
+                            </div>
+                        </a>
+                        <div>
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <div>
+                                    <h4 class="m-0"><a href="javascript:void(0)" class="text-reset">{{ post.author }}</a></h4>
+                                </div>
+                            </div>
+                            <div class="my-2">{{ post.author.profile.bio|safe }}</div>
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <a class="nav-link ps-0 pe-2 fs-5" href="javascript:void(0)"><i class="fab fa-facebook-square"></i></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-2 fs-5" href="javascript:void(0)"><i class="fab fa-twitter-square"></i></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-2 fs-5" href="javascript:void(0)"><i class="fab fa-linkedin"></i></a>
+                                </li>
+                            </ul>					
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <h3>{% trans "دیدگاه" %} {{ comments.all.count }}</h3>
+                        
+                        {% for comment in comments %}
+                        <div class="my-4 d-flex">
+                            <img class="avatar avatar-md rounded-circle float-start me-3" src="https://robohash.org/{{ comment.id }}" alt="">
+                            <div>
+                                <div class="mb-2">
+                                    <h5 class="m-0">{% firstof comment.author.get_full_name comment.author.username %}</h5>
+                                    <span class="me-3 small">{{ comment.created|jformat:'%Y/%m/%d' }}</span>
+                                </div>
+                                <p>{{ comment.content }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if comment.replies.all %}
+                        {% for reply in comment.replies.all %}
+                        <div class="my-4 d-flex ps-3 ps-md-5">
+                            <img class="avatar avatar-md rounded-circle float-start me-3" src="{% if post.author.profile.avatar %}{{ post.author.profile.avatar.url }}{% else %}https://robohash.org/{{ post.author.id }}{% endif %}" alt="">
+                            <div>
+                                <div class="mb-2">
+                                    <h5 class="m-0">{{ reply.author }}</h5>
+                                    <span class="me-3 small">{{ reply.created|jformat:'%Y/%m/%d' }}</span>
+                                </div>
+                                <p>{{ reply.content }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </div>
+                    <div>
+                        <h3>ثبت دیدگاه</h3>
+                        <small>{% trans "لطفا برای ثبت دیدگاه وارد وب‌گاه شوید!" %}</small>
+                        <form class="row g-3 mt-2" method="post">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label class="form-label">{{ form.content.label }} *</label>
+                                {{ form.content }}
+                                <small class="text-danger">{{ form.content.errors }}</small>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary w-25">ثبت</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3">
+                    <div data-sticky data-margin-top="80" data-sticky-for="991">
+                        <div>
+                            <h3 class="mb-3">اخبار مشابه </h3>
+                            <div class="tiny-slider dots-creative mt-3 mb-5">
+                                <div class="tiny-slider-inner" data-autoplay="false" data-hoverpause="true" data-gutter="0" data-arrow="false" data-dots="true" data-items="1">
+                                    <div class="card">
+                                        <div class="position-relative">
+                                            <img class="card-img" src="{% static 'images/blog/4by3/07.jpg' %}" alt="Card image">
+                                            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
+                                                <div class="w-100 mb-auto d-flex justify-content-end">
+                                                    <div class="text-end ms-auto">
+                                                        <div class="icon-md bg-white bg-opacity-10 bg-blur text-white fw-bold rounded-circle" title="8.5 rating">8.5</div>
+                                                    </div>
+                                                </div>
+                                                <div class="w-100 mt-auto">
+                                                    <a href="post-single-2.html#" class="badge text-bg-info mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>سیاست</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0 pt-3">
+                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">طرح مجلس برای گرفتن مالیات از سفته بازها</a></h5>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="position-relative">
+                                            <img class="card-img" src="{% static 'images/blog/4by3/08.jpg' %}" alt="Card image">
+                                            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
+                                                <div class="w-100 mt-auto">
+                                                    <a href="post-single-2.html#" class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>ورزش</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0 pt-3">
+                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">آمار فرزندان حاصل از روش‌های کمک‌ باروری</a></h5>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="position-relative">
+                                            <img class="card-img" src="{% static 'images/blog/4by3/09.jpg' %}" alt="Card image">
+                                            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
+                                                <div class="w-100 mt-auto">
+                                                    <a href="post-single-2.html#" class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اقتصاد</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0 pt-3">
+                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">سال 2022 رویایی و فوق العاده برای طارمی</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="post-single-2.html#" class="d-block card-img-flash">
+                                <img src="{% static 'images/adv.png' %}" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block plugins %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock%}
+
+{% block extrascript %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const wpm = 200; // میانگین سرعت مطالعه
+        const articleElement = document.getElementById("post-content");
+        const text = articleElement.innerText || articleElement.textContent;
+        const wordCount = text.trim().split(/\s+/).length;
+        const time = Math.ceil(wordCount / wpm);
+        
+        const readingTimeElement = document.getElementById("reading-time");
+        readingTimeElement.textContent = `زمان مطالعه: ${time} دقیقه`;
+    });
+</script>
+
+{% if messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for message in messages %}
+        Swal.fire({
+            {% if 'success' in message.tags %}
+            icon: "success",
+            title: "{% trans 'سپاس' %}",
+            {% else %}
+            icon: "error",
+            title: "{% trans 'خطا' %}",
+            {% endif %}
+            text: "{{ message|escapejs }}",
+            confirmButtonText: "{% trans 'باشه' %}"
+        });
+        {% endfor %}
+    });
+</script>
+{% endif %}
+{% endblock %}

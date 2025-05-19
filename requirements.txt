@@ -1,0 +1,6 @@
+Django
+pillow
+django-jalali
+django-ckeditor-5
+
+# <script src="https://unpkg.com/htmx.org"></script>
