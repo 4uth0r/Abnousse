@@ -26,7 +26,9 @@
                         <li class="nav-item"><i class="far fa-calendar-alt"></i> {{ post.updated|jformat:"%Y/%m/%d" }}</li>
                         <li class="nav-item"><i class="far fa-clock"></i> <span id="reading-time">در حال محاسبه...</span></li>
                         <li class="nav-item"><i class="far fa-eye me-1"></i> 2344 بازدید</li>
-                        <li class="nav-item"><a href="javascript:void(0)"><i class="fas fa-heart me-1 text-danger"></i></a> 266</li>
+                        <li class="nav-item" id="like-btn-{{ post.pk }}">
+                            {% include 'blog/partials/_like_button.html' with post=post session_key=request.session_key %}
+                        </li>
                     </ul>
                     <div class="d-md-flex align-items-center mt-4">
                         <h5 class="text-white me-3">{% trans "اشتراک‌گذاری" %}</h5>
@@ -70,34 +72,41 @@
                     <article id="post-content">
                         {{ post.content|safe }}
                     </article>
+                    
                     <div class="row g-0 my-3">
-                        <div class="col-sm-6 border p-3 p-md-4 position-relative rounded-start">
+                        {% if previous_post %}
+                        <div class="col-sm-6 border p-3 p-md-4 position-relative rounded-sm-start">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary bg-opacity-10 h-auto align-items-center d-flex align-self-stretch">
                                     <i class="bi bi-chevron-compact-right fs-3 text-primary px-1"></i>
                                 </div>
                                 <div class="col-3 d-none d-md-block">
-                                    <img src="{% static 'images/blog/4by3/04.jpg' %}" alt="Image">
+                                    <img src="{{ previous_post.photo.url }}" alt="">
                                 </div>
                                 <div class="ms-3">
-                                    <h5 class="m-0"> <a href="javascript:void(0)" class="stretched-link btn-link text-reset">دلیل کاهش نرخ دلار</a></h5>
+                                    <h5 class="m-0"> <a href="{% url 'blog:post-detail' previous_post.pk %}" class="stretched-link btn-link text-reset">{{ previous_post }}</a></h5>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        
+                        {% if next_post %}
                         <div class="col-sm-6 border p-3 p-md-4 position-relative text-sm-end rounded-end">
                             <div class="d-flex align-items-center">
                                 <div class="me-3">
-                                    <h5 class="m-0"> <a href="javascript:void(0)" class="stretched-link btn-link text-reset">جدول لیگ در پایان هفته</a></h5>
+                                    <h5 class="m-0"> <a href="{% url 'blog:post-detail' next_post.pk %}" class="stretched-link btn-link text-reset">{{ next_post }}</a></h5>
                                 </div>
                                 <div class="col-3 d-none d-md-block">
-                                    <img src="{% static 'images/blog/4by3/05.jpg' %}" alt="Image">
+                                    <img src="{{ next_post.photo.url }}" alt="">
                                 </div>
                                 <div class="bg-primary bg-opacity-10 h-auto align-items-center d-flex align-self-stretch">
                                     <i class="bi bi-chevron-compact-left fs-3 text-primary px-1"></i>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
+                    
                     <div class="d-flex p-2 p-md-4 my-3 bg-primary bg-opacity-10 rounded">
                         <a href="javascript:void(0)">
                             <div class="avatar avatar-xxl me-2 me-md-4">
@@ -177,58 +186,34 @@
                 <div class="col-lg-3">
                     <div data-sticky data-margin-top="80" data-sticky-for="991">
                         <div>
-                            <h3 class="mb-3">اخبار مشابه </h3>
+                            <h3 class="mb-3">نوشته‌های مشابه</h3>
                             <div class="tiny-slider dots-creative mt-3 mb-5">
                                 <div class="tiny-slider-inner" data-autoplay="false" data-hoverpause="true" data-gutter="0" data-arrow="false" data-dots="true" data-items="1">
+                                    {% for post in related_posts %}
                                     <div class="card">
                                         <div class="position-relative">
-                                            <img class="card-img" src="{% static 'images/blog/4by3/07.jpg' %}" alt="Card image">
+                                            <img class="card-img" src="{{ post.photo.url }}" alt="">
                                             <div class="card-img-overlay d-flex align-items-start flex-column p-3">
                                                 <div class="w-100 mb-auto d-flex justify-content-end">
                                                     <div class="text-end ms-auto">
-                                                        <div class="icon-md bg-white bg-opacity-10 bg-blur text-white fw-bold rounded-circle" title="8.5 rating">8.5</div>
+                                                        <div class="icon-md bg-white bg-opacity-10 bg-blur text-white fw-bold rounded-circle" title="{{ post.total_likes }} {% trans 'پسند' %}">{{ post.total_likes }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="w-100 mt-auto">
-                                                    <a href="post-single-2.html#" class="badge text-bg-info mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>سیاست</a>
+                                                    <a href="javascript:void(0)" class="badge text-bg-info mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>{{ post.category }}</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body p-0 pt-3">
-                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">طرح مجلس برای گرفتن مالیات از سفته بازها</a></h5>
+                                            <h5 class="card-title"><a href="{% url 'blog:post-detail' post.pk %}" class="btn-link text-reset">{{ post }}</a></h5>
                                         </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="position-relative">
-                                            <img class="card-img" src="{% static 'images/blog/4by3/08.jpg' %}" alt="Card image">
-                                            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
-                                                <div class="w-100 mt-auto">
-                                                    <a href="post-single-2.html#" class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>ورزش</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body p-0 pt-3">
-                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">آمار فرزندان حاصل از روش‌های کمک‌ باروری</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="position-relative">
-                                            <img class="card-img" src="{% static 'images/blog/4by3/09.jpg' %}" alt="Card image">
-                                            <div class="card-img-overlay d-flex align-items-start flex-column p-3">
-                                                <div class="w-100 mt-auto">
-                                                    <a href="post-single-2.html#" class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اقتصاد</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body p-0 pt-3">
-                                            <h5 class="card-title"><a href="javascript:void(0)" class="btn-link text-reset">سال 2022 رویایی و فوق العاده برای طارمی</a></h5>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a href="post-single-2.html#" class="d-block card-img-flash">
+                            <a href="javascript:void(0)" class="d-block card-img-flash">
                                 <img src="{% static 'images/adv.png' %}" alt="">
                             </a>
                         </div>

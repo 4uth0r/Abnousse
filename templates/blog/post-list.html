@@ -28,6 +28,7 @@
       <div class="row">
         <div class="col-lg-9">
           <div class="row gy-4">
+            
             {% for post in posts %}
             <div class="col-sm-6">
               <div class="card">
@@ -59,9 +60,9 @@
               </div>
             </div>
             {% endfor %}
-            <div class="col-12 text-center mt-5">
-              <button type="button" class="btn btn-primary-soft">{% trans "بیشتر" %} <i class="bi bi-arrow-down-circle ms-2 align-middle"></i></button>
-            </div>
+            
+            {% include "blog/partials/_pagination.html" %}
+            
           </div>
         </div>
         
@@ -87,7 +88,7 @@
             <div class="row">
               <div class="col-12 col-sm-6 col-lg-12">
                 <h4 class="mt-4 mb-3">{% trans "آخرین تارنوشت‌ها" %}</h4>
-                {% for post in posts %}
+                {% for post in latest_posts %}
                 {% if forloop.counter <= 4 %}
                 <div class="card mb-3">
                   <div class="row g-3">

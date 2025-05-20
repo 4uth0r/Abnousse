@@ -14,7 +14,7 @@ class Category(models.Model):
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
 
     class Meta:
-        ordering = ('-updated',)
+        ordering = ('-created',)
         verbose_name = _('دسته')
         verbose_name_plural = _('دسته‌ها')
     
@@ -29,7 +29,7 @@ class Tag(models.Model):
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
 
     class Meta:
-        ordering = ('-updated',)
+        ordering = ('-created',)
         verbose_name = _('برچسب')
         verbose_name_plural = _('برچسب‌ها')
     
@@ -60,15 +60,34 @@ class Post(models.Model):
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
     
     class Meta:
-        ordering = ('-updated',)
+        ordering = ('-created',)
         verbose_name = _('نوشته')
         verbose_name_plural = _('نوشته‌ها')
 
     def __str__(self):
         return self.title
+    
+    def total_likes(self):
+        return self.likes.count()
+    
+    def is_liked_by(self, session_key):
+        return self.likes.filter(session_key=session_key).exists()
 
-    def get_absolute_url(self):
-        return reverse('blog:post-detail', {'pk': self.pk})
+
+class Like(models.Model):
+    session_key = models.CharField(max_length=40)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes', verbose_name=_('نوشته'))
+    created = models.DateField(_('تاریخ ایجاد'), auto_now_add=True)    
+    updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+        verbose_name = _('پسند')
+        verbose_name_plural = _('پسندها')
+        unique_together = ('session_key', 'post')
+    
+    def __str__(self):
+        return f'{self.session_key} {_('پسندها')} {self.post}'
 
 
 class Comment(models.Model):
@@ -81,6 +100,7 @@ class Comment(models.Model):
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
 
     class Meta:
+        ordering = ('-created',)
         verbose_name = _('دیدگاه')
         verbose_name_plural = _('دیدگاه‌ها')
 

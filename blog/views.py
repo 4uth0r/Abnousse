@@ -1,33 +1,17 @@
 from django.utils.translation import get_language, gettext_lazy as _
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView, DetailView
-from django.template.loader import render_to_string
-from django.core.paginator import Paginator
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 from django.contrib import messages
+from django.views import View
 
-from .models import Category, Post
+from .models import Category, Post, Like
 from .forms import CommentForm
-
-
-def comment_chunk(request, pk):
-    post = get_object_or_404(Post, pk=pk, publish='p')
-    page = int(request.GET.get('page', 1))
-    paginator = Paginator(
-        post.comments.filter(approved=True, parent__isnull=True).order_by('-created'),
-        5
-    )
-    comments_page = paginator.get_page(page)
-    html = render_to_string(
-        'blog/_comments_chunk.html',
-        {'comments_page': comments_page}
-    )
-    return HttpResponse(html)
 
 
 class PostListView(ListView):
     model = Post
+    paginate_by = 6
     context_object_name = 'posts'
     template_name = 'blog/post-list.html'
 
@@ -37,6 +21,7 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['latest_posts'] = Post.objects.filter(language=get_language(), publish='p')[:4]
         return context
 
 
@@ -50,8 +35,24 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['form'] = kwargs.get('form') or CommentForm()
         context['comments'] = self.object.comments.filter(approved=True, parent__isnull=True).order_by('-created')
+
+        post = self.object
+        context['previous_post'] = Post.objects.filter(publish='p', language=post.language, id__lt=post.id).order_by('-id').first()
+        context['next_post'] = Post.objects.filter(publish='p', language=post.language, id__gt=post.id).order_by('id').first()
+
+        context['related_posts'] = Post.objects.filter(publish='p', language=post.language, category=post.category).exclude(id=post.id).order_by('-created')[:4]
+
+        session_key = self.request.session.session_key
+        if not session_key:
+            self.request.session.save()
+            session_key = self.request.session.session_key
+
+        context['session_key'] = session_key
+        context['is_liked_by'] = self.object.is_liked_by(session_key)
+        
         return context
 
     def post(self, request, *args, **kwargs):
@@ -75,4 +76,23 @@ class PostDetailView(DetailView):
 
         return redirect(
             reverse_lazy('blog:post-detail', kwargs={'pk': self.object.pk})
+        )
+
+
+class ToggleLikeView(View):
+    def post(self, request, pk):
+        post = get_object_or_404(Post, language=get_language(), publish='p', pk=pk)
+        session_key = request.session.session_key or request.session.save()
+
+        like, created = Like.objects.get_or_create(post=post, session_key=session_key)
+
+        if not created:
+            like.delete()
+
+        is_liked = post.is_liked_by(session_key)
+        
+        return render(
+            request,
+            'blog/partials/_like_button.html',
+            {'post': post, 'is_liked_by': is_liked}
         )

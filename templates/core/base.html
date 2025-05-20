@@ -16,9 +16,7 @@
     {% block extrastyle %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/style-rtl.css' %}" id="style-switch">
 </head>
-<body>
-    <!-- {% include "core/partials/_preloader.html" %} -->
-    
+<body>    
     {% include "core/partials/_top-alert.html" %}
     
     {% include "core/partials/_header.html" %}
@@ -34,7 +32,7 @@
     <script src="{% static 'vendor/tiny-slider/tiny-slider-rtl.js' %}"></script>
     <script src="{% static 'vendor/sticky-js/sticky.min.js' %}"></script>
     <script src="{% static 'vendor/plyr/plyr.js' %}"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     {% block plugins %}{% endblock %}
     <script src="{% static 'js/functions.js' %}"></script>
     {% block extrascript %}{% endblock %}
