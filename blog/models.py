@@ -56,6 +56,7 @@ class Post(models.Model):
     photo = models.ImageField(_('نگاره'), upload_to='uploads/post', blank=True, null=True)
     publish = models.CharField(_('وضعیت انتشار'), max_length=1, choices=Publish, default=Publish.DRAFT)
     language = models.CharField(_('زبان'), max_length=2, choices=Language, default=Language.PERSIAN)
+    view_count = models.PositiveIntegerField(_('بازدید'), default=0)
     created = models.DateField(_('تاریخ ایجاد'), auto_now_add=True)
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
     
@@ -75,8 +76,8 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    session_key = models.CharField(max_length=40)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes', verbose_name=_('نوشته'))
+    session_key = models.CharField(max_length=40)
     created = models.DateField(_('تاریخ ایجاد'), auto_now_add=True)    
     updated = models.DateField(_('تاریخ ویرایش'), auto_now=True)
 

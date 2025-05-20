@@ -31,7 +31,20 @@ class PostDetailView(DetailView):
     template_name = 'blog/post-detail.html'
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Post, pk=self.kwargs['pk'], publish='p')
+        post =  get_object_or_404(Post, pk=self.kwargs['pk'], publish='p')
+    
+        session_key = self.request.session.session_key
+        if not session_key:
+            self.request.session.save()
+            session_key = self.request.session.session_key
+
+        post_key = f"viewed_post_{post.id}"
+        if not self.request.session.get(post_key, False):
+            post.view_count += 1
+            post.save(update_fields=["view_count"])
+            self.request.session[post_key] = True
+
+        return post
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
