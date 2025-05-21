@@ -88,7 +88,7 @@ class Like(models.Model):
         unique_together = ('session_key', 'post')
     
     def __str__(self):
-        return f'{self.session_key} {_('پسندها')} {self.post}'
+        return f"{self.session_key} {_('پسندها')} {self.post}"
 
 
 class Comment(models.Model):
