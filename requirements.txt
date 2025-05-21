@@ -3,5 +3,5 @@ pillow
 django-jalali
 django-ckeditor-5
 
-# gunicorn
+gunicorn
 # <script src="https://unpkg.com/htmx.org"></script>
