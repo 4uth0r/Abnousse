@@ -1,5 +1,6 @@
 Django
 pillow
+whitenoise
 django-jalali
 django-ckeditor-5
 
