@@ -87,8 +87,9 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:home' %}">
-                <img class="navbar-brand-item light-mode-item" src="{% static 'images/logo.svg' %}" alt="logo">
-                <img class="navbar-brand-item dark-mode-item" src="{% static 'images/logo-light.svg' %}" alt="logo">
+                <!-- <img class="navbar-brand-item light-mode-item" src="{% static 'images/logo.svg' %}" alt="">
+                <img class="navbar-brand-item dark-mode-item" src="{% static 'images/logo-light.svg' %}" alt=""> -->
+                <h1 class="fs-3 fw-bold">{{ core.title }}</h1>
             </a>
             <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="text-body h6 d-none d-sm-inline-block">{% trans "منو" %}</span>
